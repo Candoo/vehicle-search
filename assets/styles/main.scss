@@ -1,0 +1,91 @@
+@use './variables' as *;
+
+// Reset & Base Styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $text-color;
+  background-color: $background-light;
+  line-height: 1.6;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: $spacing-md;
+}
+
+h1 {
+  font-size: $font-size-xxl;
+
+  @media (min-width: $breakpoint-md) {
+    font-size: 2rem;
+  }
+}
+
+h2 {
+  font-size: $font-size-xl;
+}
+
+h3 {
+  font-size: $font-size-lg;
+}
+
+p {
+  margin-bottom: $spacing-md;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+}
+
+// Utility classes
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 0 $spacing-xl;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-light {
+  color: $text-light;
+}
+
+.mt-sm { margin-top: $spacing-sm; }
+.mt-md { margin-top: $spacing-md; }
+.mt-lg { margin-top: $spacing-lg; }
+.mt-xl { margin-top: $spacing-xl; }
+
+.mb-sm { margin-bottom: $spacing-sm; }
+.mb-md { margin-bottom: $spacing-md; }
+.mb-lg { margin-bottom: $spacing-lg; }
+.mb-xl { margin-bottom: $spacing-xl; }
