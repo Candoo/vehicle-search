@@ -1,0 +1,30 @@
+@use '../variables' as *;
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: $spacing-xs $spacing-xl;
+  border: 1px solid $border-color;
+  border-radius: 24px;
+  background: $white;
+  color: $text-light;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--filter-border-hv);
+    color: $text-color;
+  }
+
+  &.active {
+    background: #5b4cfd;
+    color: $white;
+    border-color: #5b4cfd;
+  }
+}

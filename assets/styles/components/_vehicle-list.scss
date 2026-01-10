@@ -1,0 +1,63 @@
+@use '../variables' as *;
+
+.vehicle-list {
+  margin-bottom: $spacing-xl;
+}
+
+.no-results {
+  text-align: center;
+  padding: $spacing-xxl $spacing-lg;
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow;
+
+  h2 {
+    font-size: $font-size-xxl;
+    font-weight: 600;
+    color: $text-color;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    font-size: $font-size-lg;
+    color: $text-light;
+    margin: 0;
+  }
+}
+
+.no-results-illustration {
+  position: relative;
+  display: inline-block;
+}
+
+.no-results-blob {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  color: lighten($primary-color, 30%);
+  z-index: 0;
+}
+
+.no-results-image {
+  position: relative;
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  mix-blend-mode: darken;
+}
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+
+  @media (min-width: $breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

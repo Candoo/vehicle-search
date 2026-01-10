@@ -2,15 +2,15 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-08',
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
-  modules: [
-    '@pinia/nuxt'
-  ],
+  modules: ['@pinia/nuxt', '@nuxt/eslint'],
 
-  css: [
-    '~/assets/styles/main.scss'
-  ],
+  pinia: {
+    storesDirs: ['./stores/**']
+  },
+
+  css: ['~/assets/styles/main.scss'],
 
   vite: {
     css: {
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: true,
-    typeCheck: true
+    typeCheck: false
   },
 
   runtimeConfig: {
@@ -42,7 +42,15 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Search and browse vehicles' }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+          media: 'print',
+          onload: "this.media='all'"
+        }
       ]
     }
   }

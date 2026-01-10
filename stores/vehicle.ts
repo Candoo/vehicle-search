@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Vehicle, VehiclesResponse, VehicleFilters, ResponseMetadata } from '~/types/vehicle'
+import type { Vehicle, VehiclesResponse, VehicleFilters, ResponseMetadata } from '~/features/vehicle/types'
 
 export const useVehicleStore = defineStore('vehicle', {
   state: () => ({
@@ -20,49 +20,104 @@ export const useVehicleStore = defineStore('vehicle', {
       minYear: '',
       maxYear: ''
     } as VehicleFilters,
-    loading: false,
+    loading: true,
+    initialLoadComplete: false,
     error: null as string | null,
     availableMakes: [] as string[],
-    availableModels: [] as string[]
+    availableModels: [] as string[],
+    clientFilter: '' as string, // 'offers' for client-side filtering
+    lastFetchKey: '' as string // Cache key for last fetch to prevent redundant requests
   }),
 
   getters: {
-    hasVehicles: (state) => state.vehicles.length > 0,
-    totalPages: (state) => state.metadata?.last_page || 0,
-    currentPage: (state) => state.metadata?.current_page || 1,
-    totalVehicles: (state) => state.metadata?.total || 0,
-    newVehiclesCount: (state) => state.metadata?.total_new_vehicles || 0,
-    usedVehiclesCount: (state) => state.metadata?.total_used_vehicles || 0,
-    offerVehiclesCount: (state) => state.metadata?.offer_vehicles || 0
+    filteredVehicles: state => {
+      if (state.clientFilter === 'offers') {
+        return state.vehicles.filter(v => v.has_offer)
+      }
+      return state.vehicles
+    },
+    hasVehicles: state => state.vehicles.length > 0,
+    totalPages: state => {
+      // When client-side filtering for offers, don't show pagination
+      if (state.clientFilter === 'offers') {
+        return 0
+      }
+      return state.metadata?.last_page || 0
+    },
+    currentPage: state => state.metadata?.current_page || 1,
+    totalVehicles: state => {
+      if (state.clientFilter === 'offers') {
+        return state.vehicles.filter(v => v.has_offer).length
+      }
+      return state.metadata?.total || 0
+    },
+    newVehiclesCount: state => state.metadata?.total_new_vehicles || 0,
+    usedVehiclesCount: state => state.metadata?.total_used_vehicles || 0,
+    offerVehiclesCount: state => state.metadata?.offer_vehicles || 0
   },
 
   actions: {
     async fetchVehicles() {
-      this.loading = true
-      this.error = null
+      // Start timing for minimum loading duration
+      const startTime = Date.now()
+      const minLoadingTime = 500 // Minimum 500ms to show skeleton
 
       try {
         const config = useRuntimeConfig()
         const queryParams = new URLSearchParams()
 
-        // Build query string from filters
+        // Map frontend camelCase keys to API snake_case parameters
+        const apiKeyMap: Record<string, string> = {
+          page: 'page',
+          resultsPerPage: 'results_per_page',
+          advertClassification: 'advert_classification',
+          make: 'make',
+          model: 'model',
+          fuelType: 'fuel_type',
+          transmission: 'transmission',
+          bodyType: 'body_type',
+          minPrice: 'min_price',
+          maxPrice: 'max_price',
+          minYear: 'min_year',
+          maxYear: 'max_year'
+        }
+
+        // Build query string from filters with correct API parameter names
         Object.entries(this.filters).forEach(([key, value]) => {
           if (value !== '' && value !== undefined && value !== null) {
-            queryParams.append(key, String(value))
+            const apiKey = apiKeyMap[key] || key
+            queryParams.append(apiKey, String(value))
           }
         })
 
-        const response = await $fetch<VehiclesResponse>(
-          `${config.public.apiBase}/vehicles?${queryParams.toString()}`
-        )
+        const queryString = queryParams.toString()
+        const fetchKey = `${config.public.apiBase}/vehicles?${queryString}`
+
+        // Skip fetch if same as last request (prevents redundant calls)
+        if (this.lastFetchKey === fetchKey && this.vehicles.length > 0) {
+          return
+        }
+
+        this.loading = true
+        this.error = null
+
+        const response = await $fetch<VehiclesResponse>(fetchKey)
 
         this.vehicles = response.data
         this.metadata = response.meta
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch vehicles'
+        this.lastFetchKey = fetchKey
+
+        // Ensure minimum loading time to prevent flicker
+        const elapsedTime = Date.now() - startTime
+        if (elapsedTime < minLoadingTime) {
+          await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsedTime))
+        }
+      } catch (err: unknown) {
+        this.error = err instanceof Error ? err.message : 'Failed to fetch vehicles'
         console.error('Error fetching vehicles:', err)
       } finally {
         this.loading = false
+        this.initialLoadComplete = true
       }
     },
 
@@ -72,13 +127,11 @@ export const useVehicleStore = defineStore('vehicle', {
 
       try {
         const config = useRuntimeConfig()
-        const response = await $fetch<{ data: Vehicle }>(
-          `${config.public.apiBase}/vehicles/${id}`
-        )
-        this.currentVehicle = response.data
-        return response.data
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch vehicle'
+        const response = await $fetch<Vehicle>(`${config.public.apiBase}/vehicles/${id}`)
+        this.currentVehicle = response
+        return response
+      } catch (err: unknown) {
+        this.error = err instanceof Error ? err.message : 'Failed to fetch vehicle'
         console.error('Error fetching vehicle:', err)
         return null
       } finally {
@@ -92,13 +145,11 @@ export const useVehicleStore = defineStore('vehicle', {
 
       try {
         const config = useRuntimeConfig()
-        const response = await $fetch<{ data: Vehicle }>(
-          `${config.public.apiBase}/vehicles/vrm/${vrm}`
-        )
-        this.currentVehicle = response.data
-        return response.data
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch vehicle'
+        const response = await $fetch<Vehicle>(`${config.public.apiBase}/vehicles/vrm/${vrm}`)
+        this.currentVehicle = response
+        return response
+      } catch (err: unknown) {
+        this.error = err instanceof Error ? err.message : 'Failed to fetch vehicle'
         console.error('Error fetching vehicle by VRM:', err)
         return null
       } finally {
@@ -107,28 +158,22 @@ export const useVehicleStore = defineStore('vehicle', {
     },
 
     async fetchAvailableMakes() {
-      try {
-        const config = useRuntimeConfig()
-        const response = await $fetch<{ data: string[] }>(
-          `${config.public.apiBase}/makes`
-        )
-        this.availableMakes = response.data
-      } catch (err: any) {
-        console.error('Error fetching makes:', err)
+      // Extract unique makes from vehicles data
+      if (this.vehicles.length > 0) {
+        const makes = [...new Set(this.vehicles.map(v => v.make))].sort()
+        this.availableMakes = makes
       }
     },
 
     async fetchAvailableModels(make?: string) {
-      try {
-        const config = useRuntimeConfig()
-        const url = make
-          ? `${config.public.apiBase}/models?make=${make}`
-          : `${config.public.apiBase}/models`
-
-        const response = await $fetch<{ data: string[] }>(url)
-        this.availableModels = response.data
-      } catch (err: any) {
-        console.error('Error fetching models:', err)
+      // Extract unique models from vehicles data, optionally filtered by make
+      if (this.vehicles.length > 0) {
+        let filteredVehicles = this.vehicles
+        if (make) {
+          filteredVehicles = this.vehicles.filter(v => v.make === make)
+        }
+        const models = [...new Set(filteredVehicles.map(v => v.model))].sort()
+        this.availableModels = models
       }
     },
 
@@ -151,17 +196,22 @@ export const useVehicleStore = defineStore('vehicle', {
         minYear: '',
         maxYear: ''
       }
+      this.clientFilter = ''
     },
 
     setPage(page: number) {
       this.filters.page = page
       this.fetchVehicles()
+      // Prefetch next page in background
+      this.prefetchNextPage()
     },
 
     nextPage() {
       if (this.metadata && this.filters.page! < this.metadata.last_page) {
         this.filters.page = (this.filters.page || 1) + 1
         this.fetchVehicles()
+        // Prefetch next page in background
+        this.prefetchNextPage()
       }
     },
 
@@ -169,6 +219,52 @@ export const useVehicleStore = defineStore('vehicle', {
       if (this.filters.page && this.filters.page > 1) {
         this.filters.page -= 1
         this.fetchVehicles()
+        // Prefetch next page in background
+        this.prefetchNextPage()
+      }
+    },
+
+    async prefetchNextPage() {
+      // Prefetch next page data in the background for faster navigation
+      if (!this.metadata || this.filters.page! >= this.metadata.last_page) {
+        return
+      }
+
+      const config = useRuntimeConfig()
+      const queryParams = new URLSearchParams()
+      const nextPage = (this.filters.page || 1) + 1
+
+      const apiKeyMap: Record<string, string> = {
+        page: 'page',
+        resultsPerPage: 'results_per_page',
+        advertClassification: 'advert_classification',
+        make: 'make',
+        model: 'model',
+        fuelType: 'fuel_type',
+        transmission: 'transmission',
+        bodyType: 'body_type',
+        minPrice: 'min_price',
+        maxPrice: 'max_price',
+        minYear: 'min_year',
+        maxYear: 'max_year'
+      }
+
+      // Build query string with next page number
+      Object.entries({ ...this.filters, page: nextPage }).forEach(([key, value]) => {
+        if (value !== '' && value !== undefined && value !== null) {
+          const apiKey = apiKeyMap[key] || key
+          queryParams.append(apiKey, String(value))
+        }
+      })
+
+      // Prefetch without blocking (fire and forget)
+      try {
+        await $fetch<VehiclesResponse>(
+          `${config.public.apiBase}/vehicles?${queryParams.toString()}`
+        )
+      } catch (err) {
+        // Silently fail - prefetch is optional
+        console.debug('Prefetch failed:', err)
       }
     }
   }

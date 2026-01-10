@@ -1,9 +1,7 @@
 <template>
   <div class="vehicle-detail-page">
     <div class="container">
-      <NuxtLink to="/" class="back-link">
-        ← Back to Search
-      </NuxtLink>
+      <NuxtLink to="/" class="back-link"> ← Back to Search </NuxtLink>
 
       <div v-if="vehicleStore.loading" class="loading">
         <p>Loading vehicle details...</p>
@@ -14,12 +12,17 @@
       </div>
 
       <VehicleDetail v-else-if="vehicle" :vehicle="vehicle" />
+
+      <div v-else class="not-found">
+        <p>Vehicle not found</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useVehicleStore } from '~/stores/vehicle'
+import { VehicleDetail } from '~/features/vehicle/components'
 
 const route = useRoute()
 const vehicleStore = useVehicleStore()
@@ -35,6 +38,8 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/styles/variables' as *;
+
 .vehicle-detail-page {
   padding: $spacing-xl 0;
 }
@@ -43,6 +48,7 @@ onMounted(async () => {
   display: inline-block;
   margin-bottom: $spacing-lg;
   color: $primary-color;
+  text-decoration: none;
   font-weight: 500;
 
   &:hover {
@@ -51,7 +57,8 @@ onMounted(async () => {
 }
 
 .loading,
-.error {
+.error,
+.not-found {
   text-align: center;
   padding: $spacing-xxl;
 

@@ -69,33 +69,36 @@ The application will be available at `http://localhost:3000`
 - `npm run preview` - Preview production build
 - `npm run typecheck` - Run TypeScript type checking
 
+## Architecture
+
+This project follows a **feature-first architecture** with separation of concerns. See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed documentation.
+
 ## Project Structure
 
 ```
 vehicle-search/
-├── assets/
-│   └── styles/           # SCSS stylesheets
-│       ├── _variables.scss
-│       └── main.scss
-├── components/           # Vue components
-│   ├── Pagination.vue
-│   ├── VehicleCard.vue
-│   ├── VehicleDetail.vue
-│   ├── VehicleFilters.vue
-│   ├── VehicleList.vue
-│   └── VehicleStats.vue
-├── pages/                # Application pages
-│   ├── index.vue
-│   └── vehicles/
-│       └── [id].vue
-├── stores/               # Pinia stores
-│   └── vehicle.ts
-├── types/                # TypeScript type definitions
-│   └── vehicle.ts
-├── app.vue               # Root component
-├── nuxt.config.ts        # Nuxt configuration
-└── tsconfig.json         # TypeScript configuration
+├── assets/styles/       # SCSS stylesheets (separated from components)
+├── components/ui/       # Generic/reusable UI components
+├── features/vehicle/    # Vehicle feature module
+│   ├── components/      # Feature components (.vue + .ts files)
+│   └── composables/     # Shared composables
+├── pages/               # Route pages
+├── stores/              # Pinia state management
+├── types/               # TypeScript type definitions
+└── nuxt.config.ts       # Nuxt configuration
 ```
+
+**Key Architecture Features:**
+
+- 📁 Feature-based organisation (not type-based)
+- 📄 Separated `.vue` templates and `.ts` logic files
+- 🎨 External SCSS files for all styling
+- 🔄 Composables for reusable logic
+- 📦 Barrel exports for clean imports
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete details.
+
+````
 
 ## Features Overview
 
@@ -130,7 +133,7 @@ The application connects to the Vehicle API. Configure the API base URL in `.env
 
 ```env
 NUXT_PUBLIC_API_BASE=http://localhost:8080
-```
+````
 
 For production, set the environment variable to your production API URL.
 
@@ -200,8 +203,8 @@ docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE=http://api:8080 vehicle-search
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable               | Description          | Default                 |
+| ---------------------- | -------------------- | ----------------------- |
 | `NUXT_PUBLIC_API_BASE` | Vehicle API base URL | `http://localhost:8080` |
 
 ## Contributing

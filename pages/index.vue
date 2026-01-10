@@ -1,67 +1,44 @@
-<template>
-  <div class="home-page">
-    <div class="container">
-      <header class="page-header">
-        <h1>Vehicle Search</h1>
-        <p class="text-light">Browse and search our inventory of vehicles</p>
-      </header>
-
-      <VehicleFilters />
-
-      <div v-if="vehicleStore.loading" class="loading">
-        <p>Loading vehicles...</p>
-      </div>
-
-      <div v-else-if="vehicleStore.error" class="error">
-        <p>{{ vehicleStore.error }}</p>
-      </div>
-
-      <div v-else>
-        <VehicleStats />
-        <VehicleList :vehicles="vehicleStore.vehicles" />
-        <Pagination />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { useVehicleStore } from '~/stores/vehicle'
+import { VehicleFilters, VehicleList, VehicleCardSkeleton } from '~/features/vehicle/components'
+
+// Lazy load pagination component
+const UiPagination = defineAsyncComponent(() => import('~/components/ui/Pagination.vue'))
 
 const vehicleStore = useVehicleStore()
 
 // Fetch vehicles on mount
 onMounted(async () => {
   await vehicleStore.fetchVehicles()
-  await vehicleStore.fetchAvailableMakes()
 })
 </script>
 
-<style lang="scss" scoped>
-.home-page {
-  padding: $spacing-xl 0;
-}
+<template>
+  <main class="home-page">
+    <div class="container">
+      <header class="page-header">
+        <h1 v-if="vehicleStore.loading" class="vehicle-count-skeleton"></h1>
+        <h1 v-else class="vehicle-count">Showing {{ vehicleStore.totalVehicles }} cars</h1>
+        <VehicleFilters />
+      </header>
 
-.page-header {
-  margin-bottom: $spacing-xl;
-  text-align: center;
+      <div v-if="vehicleStore.error" class="error" role="alert">
+        <p>{{ vehicleStore.error }}</p>
+      </div>
 
-  h1 {
-    margin-bottom: $spacing-sm;
-  }
-}
+      <section v-else aria-label="Vehicle listings">
+        <div v-if="vehicleStore.loading" class="vehicle-list">
+          <div class="vehicle-grid">
+            <VehicleCardSkeleton v-for="n in 12" :key="`skeleton-${n}`" />
+          </div>
+        </div>
+        <template v-else>
+          <VehicleList :vehicles="vehicleStore.filteredVehicles" :initial-load-complete="vehicleStore.initialLoadComplete" />
+          <UiPagination />
+        </template>
+      </section>
+    </div>
+  </main>
+</template>
 
-.loading,
-.error {
-  text-align: center;
-  padding: $spacing-xxl;
-
-  p {
-    font-size: $font-size-lg;
-  }
-}
-
-.error {
-  color: $error-color;
-}
-</style>
+<style lang="scss" scoped src="~/assets/styles/pages/_index.scss"></style>

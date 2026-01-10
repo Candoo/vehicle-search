@@ -1,0 +1,332 @@
+@use '../variables' as *;
+
+.vehicle-card {
+  position: relative; // Required for stretched link
+  display: block;
+  background: $white;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow;
+  transition:
+    transform $transition,
+    box-shadow $transition;
+
+  // Hover effect on entire card
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.vehicle-image {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background-color: $background-light;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: $text-light;
+    font-size: $font-size-lg;
+  }
+
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      $background-light 0%,
+      lighten($background-light, 2%) 50%,
+      $background-light 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
+
+// Image carousel slide transitions with direction
+.slide-forward-enter-active,
+.slide-forward-leave-active,
+.slide-backward-enter-active,
+.slide-backward-leave-active {
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// Forward: new image comes from right, old goes left
+.slide-forward-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-forward-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+// Backward: new image comes from left, old goes right
+.slide-backward-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slide-backward-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.classification-badge {
+  position: absolute;
+  top: $spacing-sm;
+  left: $spacing-sm;
+  background-color: var(--badge-bg);
+  color: var(--badge-text);
+  border: 1px solid var(--badge-border);
+  padding: 0 $spacing-sm;
+  border-radius: $border-radius;
+  font-size: $font-size-base;
+  font-weight: 600;
+  line-height: 27px;
+  text-transform: capitalize;
+  z-index: 2; // Above stretched link for future interactivity
+
+  &.classification-new {
+    background-color: var(--badge-bg);
+    border-color: var(--badge-border);
+    color: var(--badge-text);
+  }
+
+  &.classification-used {
+    background-color: var(--badge-bg);
+    border-color: var(--badge-border);
+    color: var(--badge-text);
+  }
+}
+
+// Image overlay pills
+.image-pills {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: $spacing-xs;
+  flex-wrap: wrap;
+  z-index: 2;
+  margin: $spacing-sm;
+
+  .pill {
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    border: 1px solid var(--badge-border);
+    padding: 0 $spacing-sm;
+    border-radius: $border-radius;
+    font-size: $font-size-xs;
+    font-weight: 400;
+    line-height: 18px;
+    backdrop-filter: blur(4px);
+  }
+}
+
+// Carousel controls
+.carousel-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+  gap: $spacing-xs;
+  margin: $spacing-sm;
+}
+
+.carousel-btn {
+  position: relative;
+  background-color: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: $border-radius;
+  padding: 0 $spacing-xs;
+  cursor: pointer;
+  transition: all $transition-fast;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  svg {
+    color: var(--badge-text);
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--badge-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.image-counter {
+  color: $white;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 400;
+  backdrop-filter: blur(4px);
+}
+
+.vehicle-info {
+  padding: $spacing-sm;
+}
+
+.vehicle-name {
+  font-size: $font-size-base;
+  font-weight: 600;
+  line-height: 24px;
+  margin-top: 0;
+
+  // Stretched link implementation
+  .stretched-link {
+    color: inherit;
+    text-decoration: none;
+
+    // Create stretched link pseudo-element
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1; // Base layer for the clickable area
+      pointer-events: auto;
+    }
+
+    // Hover state for the link text
+    &:hover {
+      color: $primary-color;
+      text-decoration: underline;
+    }
+
+    // Focus state for accessibility
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+      border-radius: $border-radius-sm;
+    }
+  }
+}
+
+.vehicle-derivative {
+  font-size: $font-size-xs;
+  line-height: 18px;
+  color: $text-light;
+  margin-bottom: $spacing-md;
+}
+
+.vehicle-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-md;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-xs;
+
+  .price-value {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    line-height: 24px;
+    color: $text-color;
+  }
+
+  .price-meta {
+    font-size: $font-size-xs;
+    line-height: 18px;
+    color: $text-color;
+  }
+}
+
+.view-btn {
+  position: relative;
+  z-index: 2;
+  background: $primary-color;
+  color: $white;
+  padding: $spacing-sm $spacing-xl;
+  border: none;
+  border-radius: $border-radius;
+  font-size: $font-size-base;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.price-secondary {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-xs;
+  line-height: 18px;
+
+  .strikethrough {
+    text-decoration: line-through;
+    color: $text-light;
+  }
+
+  .savings {
+    color: $text-color;
+    font-weight: 400;
+  }
+
+  .finance-link {
+    position: relative;
+    z-index: 2;
+    color: $primary-color;
+    text-decoration: none;
+    margin-left: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
