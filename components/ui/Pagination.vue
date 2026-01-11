@@ -42,9 +42,9 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
 </script>
 
 <template>
-  <nav v-if="vehicleStore.totalPages > 1" class="pagination" aria-label="Pagination navigation">
+  <nav v-if="vehicleStore.totalPages > 1" class="container" aria-label="Pagination navigation">
     <button
-      class="pagination-btn pagination-btn--nav"
+      class="btn btn--nav"
       :disabled="vehicleStore.currentPage === 1"
       aria-label="Go to first page"
       @click="goToFirst"
@@ -56,7 +56,7 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
     </button>
 
     <button
-      class="pagination-btn pagination-btn--nav"
+      class="btn btn--nav"
       :disabled="vehicleStore.currentPage === 1"
       aria-label="Go to previous page"
       @click="vehicleStore.previousPage()"
@@ -66,12 +66,12 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
       </svg>
     </button>
 
-    <div class="pagination-pages" role="group" aria-label="Page numbers">
+    <div class="pages" role="group" aria-label="Page numbers">
       <button
         v-for="page in visiblePages"
         :key="page"
-        class="pagination-btn pagination-btn--page"
-        :class="{ 'pagination-btn--active': page === vehicleStore.currentPage }"
+        class="btn btn--page"
+        :class="{ 'btn--active': page === vehicleStore.currentPage }"
         :aria-current="page === vehicleStore.currentPage ? 'page' : undefined"
         :aria-label="`Go to page ${page}`"
         @click="goToPage(page)"
@@ -81,7 +81,7 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
     </div>
 
     <button
-      class="pagination-btn pagination-btn--nav"
+      class="btn btn--nav"
       :disabled="vehicleStore.currentPage === vehicleStore.totalPages"
       aria-label="Go to next page"
       @click="vehicleStore.nextPage()"
@@ -92,7 +92,7 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
     </button>
 
     <button
-      class="pagination-btn pagination-btn--nav"
+      class="btn btn--nav"
       :disabled="vehicleStore.currentPage === vehicleStore.totalPages"
       aria-label="Go to last page"
       @click="goToLast"

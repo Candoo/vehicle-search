@@ -1,0 +1,103 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: $white;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow;
+}
+
+.image {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background-color: $background-light;
+}
+
+.badge {
+  @include skeleton-gradient;
+  position: absolute;
+  top: $spacing-sm;
+  left: $spacing-sm;
+  width: 50px;
+  height: calc(#{$font-size-base} + #{$spacing-xs} * 2 + 2px);
+  border-radius: $border-radius;
+}
+
+.carousel-controls {
+  @include flex-layout($align: center, $gap: $spacing-xs);
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+}
+
+.counter {
+  @include skeleton-gradient;
+  width: 40px;
+  height: calc(#{$font-size-xs} + #{$spacing-xs} * 2);
+  border-radius: $border-radius-sm;
+}
+
+.carousel-btn {
+  @include skeleton-gradient;
+  width: 24px;
+  height: 24px;
+  border-radius: $border-radius;
+}
+
+.pills {
+  @include flex-layout($wrap: wrap, $gap: $spacing-xs);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: $spacing-sm;
+}
+
+.pill {
+  @include skeleton-gradient;
+  width: 55px;
+  height: calc(#{$font-size-xs} + 2px + 2px);
+  border-radius: $border-radius;
+}
+
+.info {
+  padding: $spacing-sm;
+}
+
+.title {
+  @include skeleton-gradient;
+  width: 75%;
+  height: $font-size-lg;
+  margin-bottom: $spacing-xs;
+  border-radius: $border-radius-sm;
+}
+
+.subtitle {
+  @include skeleton-gradient;
+  width: 55%;
+  height: $font-size-sm;
+  margin-bottom: $spacing-md;
+  border-radius: $border-radius-sm;
+}
+
+.footer {
+  @include flex-layout($justify: space-between, $align: center);
+  margin-top: $spacing-md;
+}
+
+.price {
+  @include skeleton-gradient;
+  width: 100px;
+  height: $font-size-xxl;
+  border-radius: $border-radius-sm;
+}
+
+.button {
+  @include skeleton-gradient;
+  width: 75px;
+  height: calc(#{$font-size-base} + #{$spacing-sm} * 2);
+  border-radius: $border-radius;
+}

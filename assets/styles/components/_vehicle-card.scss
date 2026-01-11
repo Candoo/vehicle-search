@@ -1,24 +1,24 @@
 @use '../variables' as *;
+@use '../mixins' as *;
 
-.vehicle-card {
+.card {
   position: relative; // Required for stretched link
   display: block;
+  overflow: hidden;
   background: $white;
   border-radius: $border-radius-xl;
-  overflow: hidden;
   box-shadow: $shadow;
   transition:
     transform $transition,
     box-shadow $transition;
 
-  // Hover effect on entire card
   &:hover {
-    transform: translateY(-4px);
     box-shadow: $shadow-lg;
+    transform: translateY(-4px);
   }
 }
 
-.vehicle-image {
+.image {
   position: relative;
   width: 100%;
   height: 250px;
@@ -32,13 +32,10 @@
   }
 
   .no-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-layout($justify: center, $align: center);
+    @include typography($size: $font-size-lg, $color: $text-light);
     width: 100%;
     height: 100%;
-    color: $text-light;
-    font-size: $font-size-lg;
   }
 
   .image-placeholder {
@@ -46,9 +43,9 @@
     height: 100%;
     background: linear-gradient(
       90deg,
-      $background-light 0%,
-      lighten($background-light, 2%) 50%,
-      $background-light 100%
+      var(--skeleton-base) 0%,
+      var(--skeleton-highlight) 50%,
+      var(--skeleton-base) 100%
     );
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s ease-in-out infinite;
@@ -69,12 +66,12 @@
 .slide-forward-leave-active,
 .slide-backward-enter-active,
 .slide-backward-leave-active {
-  transition: all 0.3s ease;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  transition: all 0.3s ease;
 }
 
 // Forward: new image comes from right, old goes left
@@ -100,94 +97,85 @@
 }
 
 .classification-badge {
+  @include typography(
+    $size: $font-size-base,
+    $weight: $font-weight-semibold,
+    $height: $line-height-lg,
+    $transform: capitalize
+  );
   position: absolute;
   top: $spacing-sm;
   left: $spacing-sm;
-  background-color: var(--badge-bg);
-  color: var(--badge-text);
-  border: 1px solid var(--badge-border);
-  padding: 0 $spacing-sm;
-  border-radius: $border-radius;
-  font-size: $font-size-base;
-  font-weight: 600;
-  line-height: 27px;
-  text-transform: capitalize;
   z-index: 2; // Above stretched link for future interactivity
+  padding: 0 $spacing-sm;
+  background-color: var(--overlay-bg);
+  border: 1px solid var(--overlay-border);
+  border-radius: $border-radius;
+  color: var(--overlay-text);
 
   &.classification-new {
-    background-color: var(--badge-bg);
-    border-color: var(--badge-border);
-    color: var(--badge-text);
+    background-color: var(--overlay-bg);
+    border-color: var(--overlay-border);
+    color: var(--overlay-text);
   }
 
   &.classification-used {
-    background-color: var(--badge-bg);
-    border-color: var(--badge-border);
-    color: var(--badge-text);
+    background-color: var(--overlay-bg);
+    border-color: var(--overlay-border);
+    color: var(--overlay-text);
   }
 }
 
 // Image overlay pills
 .image-pills {
+  @include flex-layout($wrap: wrap, $gap: $spacing-xs);
   position: absolute;
   bottom: 0;
   left: 0;
-  display: flex;
-  gap: $spacing-xs;
-  flex-wrap: wrap;
   z-index: 2;
   margin: $spacing-sm;
 
   .pill {
-    background-color: var(--badge-bg);
-    color: var(--badge-text);
-    border: 1px solid var(--badge-border);
+    @include typography($size: $font-size-xs, $weight: $font-weight-regular, $height: $line-height-xs);
     padding: 0 $spacing-sm;
+    background-color: var(--overlay-bg);
+    border: 1px solid var(--overlay-border);
     border-radius: $border-radius;
-    font-size: $font-size-xs;
-    font-weight: 400;
-    line-height: 18px;
+    color: var(--overlay-text);
     backdrop-filter: blur(4px);
   }
 }
 
 // Carousel controls
 .carousel-controls {
+  @include flex-layout($justify: flex-end, $align: center, $gap: $spacing-xs);
   position: absolute;
   top: 0;
   right: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
   z-index: 2;
-  pointer-events: none;
-  gap: $spacing-xs;
   margin: $spacing-sm;
+  pointer-events: none;
 }
 
 .carousel-btn {
+  @include flex-layout($justify: center, $align: center);
   position: relative;
-  background-color: var(--badge-bg);
-  border: 1px solid var(--badge-border);
-  border-radius: $border-radius;
   padding: 0 $spacing-xs;
+  background-color: var(--overlay-bg);
+  border: 1px solid var(--overlay-border);
+  border-radius: $border-radius;
   cursor: pointer;
-  transition: all $transition-fast;
   pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all $transition-fast;
 
   svg {
-    color: var(--badge-text);
     display: block;
     flex-shrink: 0;
+    color: var(--overlay-text);
   }
 
   &:hover {
-    background: var(--badge-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: var(--overlay-border);
   }
 
   &:active {
@@ -196,30 +184,24 @@
 }
 
 .image-counter {
-  color: $white;
-  padding: $spacing-xs $spacing-sm;
+  @include typography($size: $font-size-xs, $weight: $font-weight-regular, $height: $line-height-xs, $color: $white);
+  padding: 0 $spacing-xs;
   border-radius: $border-radius-sm;
-  font-size: $font-size-xs;
-  font-weight: 400;
   backdrop-filter: blur(4px);
 }
 
-.vehicle-info {
+.info {
   padding: $spacing-sm;
 }
 
-.vehicle-name {
-  font-size: $font-size-base;
-  font-weight: 600;
-  line-height: 24px;
+.name {
+  @include typography($size: $font-size-base, $weight: $font-weight-semibold, $height: $line-height-base);
   margin-top: 0;
 
-  // Stretched link implementation
   .stretched-link {
     color: inherit;
     text-decoration: none;
 
-    // Create stretched link pseudo-element
     &::after {
       content: '';
       position: absolute;
@@ -231,69 +213,61 @@
       pointer-events: auto;
     }
 
-    // Hover state for the link text
     &:hover {
       color: $primary-color;
       text-decoration: underline;
     }
 
-    // Focus state for accessibility
     &:focus {
+      border-radius: $border-radius-sm;
       outline: 2px solid $primary-color;
       outline-offset: 2px;
-      border-radius: $border-radius-sm;
     }
   }
 }
 
-.vehicle-derivative {
-  font-size: $font-size-xs;
-  line-height: 18px;
-  color: $text-light;
+.derivative {
+  @include typography($size: $font-size-xs, $height: $line-height-xs, $color: $text-light);
   margin-bottom: $spacing-md;
 }
 
-.vehicle-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.footer {
+  @include flex-layout($justify: space-between, $align: center);
   margin-top: $spacing-md;
 }
 
 .price {
-  display: flex;
-  align-items: baseline;
-  gap: $spacing-xs;
+  @include flex-layout($justify: space-between, $align: baseline, $gap: $spacing-xs);
 
   .price-value {
-    font-size: $font-size-lg;
-    font-weight: 700;
-    line-height: 24px;
-    color: $text-color;
+    @include typography(
+      $size: $font-size-lg,
+      $weight: $font-weight-bold,
+      $height: $line-height-base,
+      $color: $text-color
+    );
   }
 
   .price-meta {
-    font-size: $font-size-xs;
-    line-height: 18px;
-    color: $text-color;
+    @include typography($size: $font-size-xs, $height: $line-height-xs, $color: $text-color);
   }
 }
 
 .view-btn {
+  @include typography($size: $font-size-base, $weight: $font-weight-semibold);
   position: relative;
   z-index: 2;
-  background: $primary-color;
-  color: $white;
   padding: $spacing-sm $spacing-xl;
-  border: none;
-  border-radius: $border-radius;
-  font-size: $font-size-base;
-  font-weight: 600;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: $border-radius-lg;
+  color: $white;
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover {
-    background: darken($primary-color, 10%);
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
   }
 
   &:active {
@@ -302,28 +276,25 @@
 }
 
 .price-secondary {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  font-size: $font-size-xs;
-  line-height: 18px;
+  @include flex-layout($align: center, $gap: $spacing-sm);
+  @include typography($size: $font-size-xs, $height: $line-height-xs);
 
   .strikethrough {
-    text-decoration: line-through;
     color: $text-light;
+    text-decoration: line-through;
   }
 
   .savings {
     color: $text-color;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
   }
 
   .finance-link {
     position: relative;
     z-index: 2;
+    margin-left: auto;
     color: $primary-color;
     text-decoration: none;
-    margin-left: auto;
 
     &:hover {
       text-decoration: underline;

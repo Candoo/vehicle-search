@@ -32,8 +32,8 @@ const transitionName = computed(() => {
 </script>
 
 <template>
-  <article class="vehicle-card">
-    <div class="vehicle-image">
+  <article class="card">
+    <div class="image">
       <!-- Loading placeholder shown until image loads -->
       <div v-if="!imageLoaded && !imageError" class="image-placeholder"></div>
 
@@ -115,19 +115,19 @@ const transitionName = computed(() => {
       </div>
     </div>
 
-    <div class="vehicle-info">
-      <h3 class="vehicle-name">
+    <div class="info">
+      <h3 class="name">
         <NuxtLink :to="`/vehicles/${vehicle.vehicle_id}`" class="stretched-link">
           {{ vehicle.year }} ({{ vehicle.model_year || vehicle.year.slice(-2) }}) {{ vehicle.make }} {{ vehicle.model }}
         </NuxtLink>
       </h3>
-      <p class="vehicle-derivative">{{ vehicle.derivative }}</p>
+      <p class="derivative">{{ vehicle.derivative }}</p>
 
-      <div class="vehicle-footer">
+      <div class="footer">
         <div class="price-details">
           <div class="price">
-            <span class="price-value">£{{ formatPrice(vehicle.price) }}</span>
-            <span class="price-meta">/mo (PCP)</span>
+            <span class="price-value">£{{ formatPrice(vehicle.monthly_payment) }}</span>
+            <span class="price-meta">/mo ({{ vehicle.monthly_finance_type }})</span>
           </div>
           <div v-if="vehicle.original_price" class="price-secondary">
             <span class="savings">£{{ formatPrice(vehicle.price_ex_vat) }}</span>

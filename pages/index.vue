@@ -14,11 +14,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="home-page">
+  <main class="page">
     <div class="container">
-      <header class="page-header">
-        <h1 v-if="vehicleStore.loading" class="vehicle-count-skeleton"></h1>
-        <h1 v-else class="vehicle-count">Showing {{ vehicleStore.totalVehicles }} cars</h1>
+      <header class="header">
+        <h1 v-if="vehicleStore.loading" class="count-skeleton"></h1>
+        <h1 v-else class="count">Showing {{ vehicleStore.totalVehicles }} cars</h1>
         <VehicleFilters />
       </header>
 
@@ -27,8 +27,8 @@ onMounted(async () => {
       </div>
 
       <section v-else aria-label="Vehicle listings">
-        <div v-if="vehicleStore.loading" class="vehicle-list">
-          <div class="vehicle-grid">
+        <div v-if="vehicleStore.loading" class="skeleton-list">
+          <div class="skeleton-grid">
             <VehicleCardSkeleton v-for="n in 12" :key="`skeleton-${n}`" />
           </div>
         </div>

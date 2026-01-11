@@ -5,11 +5,11 @@ const { activeFilter, setFilter } = useVehicleFilters()
 </script>
 
 <template>
-  <nav class="vehicle-filters" aria-label="Vehicle filters">
-    <div class="filter-buttons" role="group" aria-label="Filter by classification">
+  <nav class="filters" aria-label="Vehicle filters">
+    <div class="buttons" role="group" aria-label="Filter by classification">
       <button
         type="button"
-        :class="['filter-btn', { active: activeFilter === 'all' }]"
+        :class="['btn', { active: activeFilter === 'all' }]"
         :aria-pressed="activeFilter === 'all'"
         @click="setFilter('all')"
       >
@@ -17,7 +17,7 @@ const { activeFilter, setFilter } = useVehicleFilters()
       </button>
       <button
         type="button"
-        :class="['filter-btn', { active: activeFilter === 'used' }]"
+        :class="['btn', { active: activeFilter === 'used' }]"
         :aria-pressed="activeFilter === 'used'"
         @click="setFilter('used')"
       >
@@ -25,7 +25,7 @@ const { activeFilter, setFilter } = useVehicleFilters()
       </button>
       <button
         type="button"
-        :class="['filter-btn', { active: activeFilter === 'new' }]"
+        :class="['btn', { active: activeFilter === 'new' }]"
         :aria-pressed="activeFilter === 'new'"
         @click="setFilter('new')"
       >
@@ -33,7 +33,7 @@ const { activeFilter, setFilter } = useVehicleFilters()
       </button>
       <button
         type="button"
-        :class="['filter-btn', { active: activeFilter === 'offers' }]"
+        :class="['btn', { active: activeFilter === 'offers' }]"
         :aria-pressed="activeFilter === 'offers'"
         @click="setFilter('offers')"
       >

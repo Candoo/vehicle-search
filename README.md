@@ -4,14 +4,14 @@ A modern, responsive vehicle search application built with Nuxt 3, Vue 3, TypeSc
 
 ## Features
 
-- 🚗 Browse and search vehicle inventory
-- 🔍 Advanced filtering (make, model, price, year, fuel type, transmission, body type)
-- 📱 Responsive design for mobile, tablet, and desktop
-- 📊 Real-time statistics (total vehicles, new/used counts, special offers)
-- 🎨 Modern UI with SCSS styling
-- 🔄 State management with Pinia
-- 📝 Full TypeScript support
-- 🖼️ Image gallery for vehicle details
+- Browse and search vehicle inventory
+- Quick filters (All, Used, New, Offers)
+- Responsive design for mobile, tablet, and desktop
+- Image carousel with directional transitions
+- Loading skeletons for smooth UX
+- Numbered pagination with navigation controls
+- State management with Pinia
+- Full TypeScript support
 
 ## Tech Stack
 
@@ -68,6 +68,9 @@ The application will be available at `http://localhost:3000`
 - `npm run generate` - Generate static site
 - `npm run preview` - Preview production build
 - `npm run typecheck` - Run TypeScript type checking
+- `npm run lint` - Check for linting issues
+- `npm run lint:fix` - Fix auto-fixable linting issues
+- `npm run format` - Format all files with Prettier
 
 ## Architecture
 
@@ -77,55 +80,62 @@ This project follows a **feature-first architecture** with separation of concern
 
 ```
 vehicle-search/
-├── assets/styles/       # SCSS stylesheets (separated from components)
+├── assets/
+│   ├── images/          # Static images
+│   └── styles/          # SCSS stylesheets
+│       ├── components/  # Component-specific styles
+│       ├── pages/       # Page-specific styles
+│       ├── _variables.scss
+│       └── main.scss
 ├── components/ui/       # Generic/reusable UI components
 ├── features/vehicle/    # Vehicle feature module
 │   ├── components/      # Feature components (.vue + .ts files)
-│   └── composables/     # Shared composables
+│   ├── composables/     # Shared composables
+│   └── types/           # Feature-specific types
 ├── pages/               # Route pages
 ├── stores/              # Pinia state management
-├── types/               # TypeScript type definitions
 └── nuxt.config.ts       # Nuxt configuration
 ```
 
 **Key Architecture Features:**
 
-- 📁 Feature-based organisation (not type-based)
-- 📄 Separated `.vue` templates and `.ts` logic files
-- 🎨 External SCSS files for all styling
-- 🔄 Composables for reusable logic
-- 📦 Barrel exports for clean imports
+- Feature-based organisation (not type-based)
+- Separated `.vue` templates and `.ts` logic files
+- External SCSS files for all styling
+- Composables for reusable logic
+- Barrel exports for clean imports
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete details.
-
-````
 
 ## Features Overview
 
 ### Vehicle List Page
 
-- Grid layout of vehicle cards
-- Filter panel with multiple options
-- Pagination
-- Statistics overview
+- Responsive grid layout of vehicle cards
+- Quick filter buttons (All, Used, New, Offers)
+- Loading skeletons during data fetch
+- Numbered pagination with first/prev/next/last controls
+- No results state with illustration
 
-### Vehicle Detail Page
+### Vehicle Cards
 
-- Image gallery with thumbnails
-- Comprehensive vehicle specifications
-- Key features list
-- Pricing information
-- Monthly payment details
+- Image carousel with prev/next navigation
+- Directional slide transitions
+- Classification badge (New/Used)
+- Vehicle specs pills (fuel type, transmission, mileage, year)
+- Pricing with optional offer display
+- Stretched link for full card clickability
 
-### Filtering Options
+### Filtering
 
-- Classification (New/Used)
-- Make and Model
-- Fuel Type (Petrol, Diesel, Electric, Hybrid)
-- Transmission (Manual, Automatic)
-- Body Type
-- Price Range (Min/Max)
-- Year Range (Min/Max)
+Current filtering options:
+
+| Filter  | Description                              |
+| ------- | ---------------------------------------- |
+| All     | Show all vehicles                        |
+| Used    | Filter by used vehicles (API parameter)  |
+| New     | Filter by new vehicles (API parameter)   |
+| Offers  | Filter vehicles with offers (client-side)|
 
 ## API Integration
 
@@ -133,7 +143,7 @@ The application connects to the Vehicle API. Configure the API base URL in `.env
 
 ```env
 NUXT_PUBLIC_API_BASE=http://localhost:8080
-````
+```
 
 For production, set the environment variable to your production API URL.
 
@@ -172,33 +182,6 @@ npx vercel
 ```bash
 npm run generate
 # Upload .output/public directory to Netlify
-```
-
-### Docker Deployment
-
-Create a `Dockerfile`:
-
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:18-alpine
-WORKDIR /app
-COPY --from=builder /app/.output ./.output
-ENV NUXT_PUBLIC_API_BASE=http://your-api-url:8080
-EXPOSE 3000
-CMD ["node", ".output/server/index.mjs"]
-```
-
-Build and run:
-
-```bash
-docker build -t vehicle-search .
-docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE=http://api:8080 vehicle-search
 ```
 
 ## Environment Variables

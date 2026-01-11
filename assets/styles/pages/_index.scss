@@ -1,61 +1,45 @@
 @use '../variables' as *;
+@use '../mixins' as *;
 
-.home-page {
+.page {
   padding: $spacing-xl 0;
 }
 
-.page-header {
+.header {
+  @include flex-layout($align: center, $justify: flex-start, $wrap: wrap, $gap: $spacing-lg);
   margin-bottom: $spacing-xl;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: $spacing-lg;
-
-  .vehicle-count {
-    font-size: $font-size-lg;
-    font-weight: 700;
-    color: $text-color;
-    margin: 0;
-    min-width: 170px;
-  }
-
-  .vehicle-count-skeleton {
-    width: 170px;
-    height: $font-size-lg;
-    background: linear-gradient(
-      90deg,
-      #f0f0f0 0%,
-      #f5f5f5 50%,
-      #f0f0f0 100%
-    );
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s ease-in-out infinite;
-    border-radius: $border-radius-sm;
-    margin: 0;
-  }
 }
 
-.loading,
+.count {
+  @include typography($size: $font-size-lg, $weight: $font-weight-bold, $height: $line-height-lg, $color: $text-color);
+  min-width: 170px;
+  margin: 0;
+}
+
+.count-skeleton {
+  @include skeleton-gradient;
+  width: 170px;
+  height: $line-height-lg;
+  margin: 0;
+  border-radius: $border-radius-sm;
+}
+
 .error {
-  text-align: center;
   padding: $spacing-xxl;
+  color: $error-color;
+  text-align: center;
 
   p {
-    font-size: $font-size-lg;
+    @include typography($size: $font-size-lg, $height: $line-height-lg);
   }
 }
 
-.error {
-  color: $error-color;
-}
-
-// Grid styles for vehicle list (including skeleton loading state)
-.vehicle-list {
+// Skeleton loading state grid
+.skeleton-list {
   margin-bottom: $spacing-xl;
 }
 
-.vehicle-grid {
+.skeleton-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: $spacing-md;
@@ -66,14 +50,5 @@
 
   @media (min-width: $breakpoint-md) {
     grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }

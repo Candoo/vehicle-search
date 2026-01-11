@@ -1,0 +1,94 @@
+/// Flexbox layout mixin with conditional property rendering.
+/// Only outputs CSS properties for the arguments you provide.
+
+/// @param {String} $justify      [null] - Horizontal alignment: flex-start, center, space-between, etc.
+/// @param {String} $align        [null] - Vertical alignment: stretch, center, flex-end, etc.
+/// @param {String} $direction    [null] - Direction of items: row, row-reverse, column, column-reverse.
+/// @param {String} $wrap         [null] - Wrapping behavior: nowrap, wrap, wrap-reverse.
+/// @param {String | Number} $gap [null] - Gap between items: e.g., 10px, 1rem, or 10px 20px (row column).
+
+@mixin flex-layout($justify: null, $align: null, $direction: null, $wrap: null, $gap: null) {
+  display: flex;
+
+  // Render justify-content only if a value is passed
+  @if $justify {
+    justify-content: $justify;
+  }
+
+  // Render align-items only if a value is passed
+  @if $align {
+    align-items: $align;
+  }
+
+  // Render flex-direction only if a value is passed
+  @if $direction {
+    flex-direction: $direction;
+  }
+
+  // Render flex-wrap only if a value is passed
+  @if $wrap {
+    flex-wrap: $wrap;
+  }
+
+  // Render gap only if a value is passed
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+/// Typography mixin with conditional property rendering.
+/// Only outputs CSS properties for the arguments you provide.
+///
+/// @param {String | Number} $size      [null] - Font size: e.g., 16px, 1rem, $font-size-lg
+/// @param {String | Number} $weight    [null] - Font weight: 400, 500, 600, 700, bold, etc.
+/// @param {String | Number} $height    [null] - Line height: e.g., 1.5, 24px, normal
+/// @param {String} $transform          [null] - Text transform: uppercase, capitalize, lowercase, none
+/// @param {String | Number} $spacing   [null] - Letter spacing: e.g., 0.5px, 0.1em
+/// @param {String} $color              [null] - Text color
+@mixin typography($size: null, $weight: null, $height: null, $transform: null, $spacing: null, $color: null) {
+  @if $size {
+    font-size: $size;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $height {
+    line-height: $height;
+  }
+
+  @if $transform {
+    text-transform: $transform;
+  }
+
+  @if $spacing {
+    letter-spacing: $spacing;
+  }
+
+  @if $color {
+    color: $color;
+  }
+}
+
+/// Skeleton loading gradient animation.
+/// Creates a shimmer effect for placeholder content.
+@mixin skeleton-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

@@ -1,54 +1,52 @@
 @use '../variables' as *;
+@use '../mixins' as *;
 
-.vehicle-list {
+.list {
   margin-bottom: $spacing-xl;
 }
 
-.no-results {
-  text-align: center;
+.empty {
   padding: $spacing-xxl $spacing-lg;
   background: $white;
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-xl;
   box-shadow: $shadow;
+  text-align: center;
 
   h2 {
-    font-size: $font-size-xxl;
-    font-weight: 600;
-    color: $text-color;
+    @include typography($size: $font-size-xxl, $weight: $font-weight-semibold, $height: $line-height-xxl, $color: $text-color);
     margin-bottom: $spacing-sm;
   }
 
   p {
-    font-size: $font-size-lg;
-    color: $text-light;
+    @include typography($size: $font-size-lg, $height: $line-height-lg, $color: $text-light);
     margin: 0;
   }
 }
 
-.no-results-illustration {
+.illustration {
   position: relative;
   display: inline-block;
 }
 
-.no-results-blob {
+.blob {
   position: absolute;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  max-height: 400px;
-  color: lighten($primary-color, 30%);
-  z-index: 0;
+  max-height: 300px;
+  color: var(--primary-light);
 }
 
-.no-results-image {
+.image {
   position: relative;
-  max-width: 450px;
-  width: 100%;
-  height: auto;
   z-index: 1;
+  width: 100%;
+  max-width: 450px;
+  height: auto;
   mix-blend-mode: darken;
 }
 
-.vehicle-grid {
+.grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: $spacing-md;
