@@ -28,6 +28,16 @@ A modern, responsive vehicle search application built with Nuxt 3, Vue 3, TypeSc
 - npm 9.x or higher
 - Vehicle API running (see [vehicles-api](https://github.com/Candoo/vehicles-api))
 
+## Quick Links (Running Locally)
+
+Once the app is running:
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Frontend** | http://localhost:3000 | Vehicle search application |
+| **API** | http://localhost:8080 | Backend API (set via .env) |
+| **API Docs** | http://localhost:8080/swagger/index.html | Interactive API documentation |
+
 ## Quick Start
 
 1. **Clone the repository**
@@ -61,16 +71,25 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
+5. **Verify everything is working**
+
+- Open http://localhost:3000 in your browser
+- Ensure the Vehicle API is running at http://localhost:8080
+- Check API Swagger docs: http://localhost:8080/swagger/index.html
+
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run generate` - Generate static site
-- `npm run preview` - Preview production build
+### Development
+- `npm run dev` - Start development server (http://localhost:3000)
 - `npm run typecheck` - Run TypeScript type checking
 - `npm run lint` - Check for linting issues
 - `npm run lint:fix` - Fix auto-fixable linting issues
 - `npm run format` - Format all files with Prettier
+
+### Production
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run generate` - Generate static site (.output/public)
 
 ## Architecture
 
@@ -146,6 +165,20 @@ NUXT_PUBLIC_API_BASE=http://localhost:8080
 ```
 
 For production, set the environment variable to your production API URL.
+
+### Accessing API Documentation
+
+While running the frontend, you can access the backend API documentation:
+
+```
+http://localhost:8080/swagger/index.html
+```
+
+This provides interactive documentation for all available API endpoints, allowing you to:
+- See all available endpoints and their parameters
+- Try out API requests directly from the documentation
+- View request/response examples
+- Understand the data structure returned by the API
 
 ## Building for Production
 
