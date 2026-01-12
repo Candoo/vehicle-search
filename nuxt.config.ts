@@ -19,6 +19,13 @@ export default defineNuxtConfig({
           additionalData: '@use "~/assets/styles/_variables.scss" as *;'
         }
       }
+    },
+    server: {
+      hmr: {
+        host: 'localhost',
+        port: 3000,
+        protocol: 'ws'
+      }
     }
   },
 
