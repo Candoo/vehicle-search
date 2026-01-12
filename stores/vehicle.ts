@@ -25,8 +25,8 @@ export const useVehicleStore = defineStore('vehicle', {
     error: null as string | null,
     availableMakes: [] as string[],
     availableModels: [] as string[],
-    clientFilter: '' as string, // 'offers' for client-side filtering
-    lastFetchKey: '' as string // Cache key for last fetch to prevent redundant requests
+    clientFilter: '' as string, 
+    lastFetchKey: '' as string 
   }),
 
   getters: {
@@ -60,7 +60,7 @@ export const useVehicleStore = defineStore('vehicle', {
     async fetchVehicles() {
       // Start timing for minimum loading duration
       const startTime = Date.now()
-      const minLoadingTime = 500 // Minimum 500ms to show skeleton
+      const minLoadingTime = 500
 
       try {
         const config = useRuntimeConfig()
@@ -93,7 +93,7 @@ export const useVehicleStore = defineStore('vehicle', {
         const queryString = queryParams.toString()
         const fetchKey = `${config.public.apiBase}/vehicles?${queryString}`
 
-        // Skip fetch if same as last request (prevents redundant calls)
+        // Skip fetch if same as last request
         if (this.lastFetchKey === fetchKey && this.vehicles.length > 0) {
           return
         }
@@ -202,7 +202,6 @@ export const useVehicleStore = defineStore('vehicle', {
     setPage(page: number) {
       this.filters.page = page
       this.fetchVehicles()
-      // Prefetch next page in background
       this.prefetchNextPage()
     },
 
@@ -210,7 +209,6 @@ export const useVehicleStore = defineStore('vehicle', {
       if (this.metadata && this.filters.page! < this.metadata.last_page) {
         this.filters.page = (this.filters.page || 1) + 1
         this.fetchVehicles()
-        // Prefetch next page in background
         this.prefetchNextPage()
       }
     },
@@ -219,13 +217,11 @@ export const useVehicleStore = defineStore('vehicle', {
       if (this.filters.page && this.filters.page > 1) {
         this.filters.page -= 1
         this.fetchVehicles()
-        // Prefetch next page in background
         this.prefetchNextPage()
       }
     },
 
     async prefetchNextPage() {
-      // Prefetch next page data in the background for faster navigation
       if (!this.metadata || this.filters.page! >= this.metadata.last_page) {
         return
       }

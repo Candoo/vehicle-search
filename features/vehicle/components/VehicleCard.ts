@@ -9,12 +9,11 @@ export const useVehicleCard = (props: VehicleCardProps) => {
   const { formatPrice, formatMileage } = useVehicleFormatting()
   const router = useRouter()
 
-  // Image carousel state
   const currentImageIndex = ref(0)
   const imageError = ref(false)
   const imageLoaded = ref(false)
   const slideDirection = ref<'forward' | 'backward'>('forward')
-  const hasInteracted = ref(false) // Track if user has clicked carousel buttons
+  const hasInteracted = ref(false)
 
   const classificationClass = computed(() => {
     return props.vehicle.advert_classification.toLowerCase() === 'new'
@@ -37,6 +36,13 @@ export const useVehicleCard = (props: VehicleCardProps) => {
     return props.vehicle.media_urls[currentImageIndex.value]?.medium || null
   })
 
+  const allImages = computed(() => {
+    if (!props.vehicle.media_urls || props.vehicle.media_urls.length === 0) {
+      return []
+    }
+    return props.vehicle.media_urls.map(media => media.medium).filter(Boolean)
+  })
+
   const handleImageError = () => {
     imageError.value = true
     imageLoaded.value = false
@@ -48,27 +54,27 @@ export const useVehicleCard = (props: VehicleCardProps) => {
   }
 
   const nextImage = () => {
-    hasInteracted.value = true // Mark that user has clicked
+    hasInteracted.value = true
     slideDirection.value = 'forward'
-    imageLoaded.value = false // Hide current image immediately
+    imageLoaded.value = false
     if (currentImageIndex.value < totalImages.value - 1) {
       currentImageIndex.value++
     } else {
-      currentImageIndex.value = 0 // Loop back to first image
+      currentImageIndex.value = 0
     }
-    imageError.value = false // Reset error state when changing images
+    imageError.value = false
   }
 
   const previousImage = () => {
-    hasInteracted.value = true // Mark that user has clicked
+    hasInteracted.value = true 
     slideDirection.value = 'backward'
-    imageLoaded.value = false // Hide current image immediately
+    imageLoaded.value = false
     if (currentImageIndex.value > 0) {
       currentImageIndex.value--
     } else {
-      currentImageIndex.value = totalImages.value - 1 // Loop to last image
+      currentImageIndex.value = totalImages.value - 1
     }
-    imageError.value = false // Reset error state when changing images
+    imageError.value = false
   }
 
   const goToVehicle = () => {
@@ -83,6 +89,7 @@ export const useVehicleCard = (props: VehicleCardProps) => {
     totalImages,
     hasMultipleImages,
     currentImage,
+    allImages,
     imageError,
     imageLoaded,
     slideDirection,

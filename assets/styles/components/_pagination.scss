@@ -2,30 +2,44 @@
 @use '../mixins' as *;
 
 .container {
-  @include flex-layout($justify: center, $align: center, $gap: $spacing-sm);
+  @include flex-layout(
+    $justify: center, 
+    $align: center, 
+    $gap: $spacing-xs
+  );
+
   padding: $spacing-xl 0;
 }
 
 .pages {
   display: flex;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
 }
 
 .btn {
-  @include flex-layout($justify: center, $align: center);
-  @include typography($size: $font-size-base, $weight: $font-weight-medium);
-  min-width: 44px;
-  height: 44px;
-  padding: $spacing-sm;
+  @include flex-layout(
+    $justify: center, 
+    $align: center
+  );
+
+  @include typography(
+    $size: $font-size-xs, 
+    $weight: $font-weight-medium
+  );
+  
+  min-width: 48px;
+  height: 28px;
+  padding: 0;
   background-color: $white;
   border: 1px solid $border-color;
   border-radius: $border-radius;
-  color: $text-color;
+  color: $text-light;
   cursor: pointer;
   transition: all $transition-fast;
 
   &:hover:not(:disabled):not(.btn--active) {
     border-color: $text-color;
+    color: $text-color;
   }
 
   &:disabled {

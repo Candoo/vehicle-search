@@ -15,17 +15,17 @@ onMounted(async () => {
 
 <template>
   <main class="page">
-    <div class="container">
-      <header class="header">
+    <header class="header">
+      <div class="heading">
         <h1 v-if="vehicleStore.loading" class="count-skeleton"></h1>
         <h1 v-else class="count">Showing {{ vehicleStore.totalVehicles }} cars</h1>
-        <VehicleFilters />
-      </header>
-
+      </div>
+      <VehicleFilters />
+    </header>
+    <div class="container">
       <div v-if="vehicleStore.error" class="error" role="alert">
         <p>{{ vehicleStore.error }}</p>
       </div>
-
       <section v-else aria-label="Vehicle listings">
         <div v-if="vehicleStore.loading" class="skeleton-list">
           <div class="skeleton-grid">

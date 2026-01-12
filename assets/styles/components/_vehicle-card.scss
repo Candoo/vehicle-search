@@ -2,28 +2,90 @@
 @use '../mixins' as *;
 
 .card {
-  position: relative; // Required for stretched link
+  position: relative;
   display: block;
   overflow: hidden;
   background: $white;
-  border-radius: $border-radius-xl;
-  box-shadow: $shadow;
-  transition:
+
+  @media (min-width: $breakpoint-sm) {
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow;
+    transition:
     transform $transition,
     box-shadow $transition;
-
-  &:hover {
-    box-shadow: $shadow-lg;
-    transform: translateY(-4px);
   }
 }
 
 .image {
   position: relative;
   width: 100%;
-  height: 250px;
-  overflow: hidden;
-  background-color: $background-light;
+
+  @media (min-width: $breakpoint-sm) {
+    background-color: $background-light;
+    height: 250px;
+  }
+}
+
+// Mobile gallery - scrollable container
+.mobile-gallery {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: $spacing-xs;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  margin-bottom: $spacing-sm;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    display: none;
+  }
+}
+
+// Mobile gallery images
+.mobile-gallery-img {
+  flex: 0 0 auto;
+  width: 113px;
+  height: 84px;
+  aspect-ratio: 4 / 3;
+  border-radius: $border-radius-lg;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+
+// Mobile no-image placeholder
+.mobile-no-image {
+  @include flex-layout(
+    $justify: center, 
+    $align: center
+  );
+
+  @include typography(
+    $size: $font-size-sm, 
+    $color: $text-light
+  );
+  
+  flex: 0 0 auto;
+  width: 140px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: $border-radius-lg;
+  background-color: darken($background-light, 5%);
+}
+
+// Desktop image wrapper
+.desktop-image {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
 
   img {
     width: 100%;
@@ -32,8 +94,16 @@
   }
 
   .no-image {
-    @include flex-layout($justify: center, $align: center);
-    @include typography($size: $font-size-lg, $color: $text-light);
+    @include flex-layout(
+      $justify: center, 
+      $align: center
+    );
+
+    @include typography(
+      $size: $font-size-lg, 
+      $color: $text-light
+    );
+
     width: 100%;
     height: 100%;
   }
@@ -58,6 +128,10 @@
     100% {
       background-position: -200% 0;
     }
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    display: block;
   }
 }
 
@@ -103,10 +177,12 @@
     $height: $line-height-lg,
     $transform: capitalize
   );
+
+  display: none;
   position: absolute;
   top: $spacing-sm;
   left: $spacing-sm;
-  z-index: 2; // Above stretched link for future interactivity
+  z-index: 2;
   padding: 0 $spacing-sm;
   background-color: var(--overlay-bg);
   border: 1px solid var(--overlay-border);
@@ -124,11 +200,41 @@
     border-color: var(--overlay-border);
     color: var(--overlay-text);
   }
+
+  @media (min-width: $breakpoint-sm) {
+    display: block;
+  }
+}
+
+// Mobile classification badge (in header row)
+.classification-badge-mobile {
+  @include typography(
+    $size: $font-size-xs,
+    $weight: $font-weight-regular,
+    $height: $line-height-xs,
+    $transform: capitalize
+  );
+
+  flex-shrink: 0;
+  padding-inline: $spacing-sm;
+  background-color: var(--overlay-bg);
+  border: 1px solid var(--overlay-border);
+  border-radius: $border-radius-lg;
+  color: var(--overlay-text);
+
+  @media (min-width: $breakpoint-sm) {
+    display: none;
+  }
 }
 
 // Image overlay pills
 .image-pills {
-  @include flex-layout($wrap: wrap, $gap: $spacing-xs);
+  @include flex-layout(
+    $wrap: wrap, 
+    $gap: $spacing-xs
+  );
+
+  display: none;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -136,7 +242,12 @@
   margin: $spacing-sm;
 
   .pill {
-    @include typography($size: $font-size-xs, $weight: $font-weight-regular, $height: $line-height-xs);
+    @include typography(
+      $size: $font-size-xs, 
+      $weight: $font-weight-regular, 
+      $height: $line-height-xs
+    );
+
     padding: 0 $spacing-sm;
     background-color: var(--overlay-bg);
     border: 1px solid var(--overlay-border);
@@ -144,23 +255,41 @@
     color: var(--overlay-text);
     backdrop-filter: blur(4px);
   }
+
+  @media (min-width: $breakpoint-sm) {
+    display: flex;
+  }
 }
 
 // Carousel controls
 .carousel-controls {
-  @include flex-layout($justify: flex-end, $align: center, $gap: $spacing-xs);
+  @include flex-layout(
+    $justify: flex-end, 
+    $align: center, 
+    $gap: $spacing-xs
+  );
+
+  display: none;
   position: absolute;
   top: 0;
   right: 0;
   z-index: 2;
   margin: $spacing-sm;
   pointer-events: none;
+
+  @media (min-width: $breakpoint-sm) {
+    display: flex;
+  }
 }
 
 .carousel-btn {
-  @include flex-layout($justify: center, $align: center);
+  @include flex-layout(
+    $justify: center, 
+    $align: center
+  );
+
   position: relative;
-  padding: 0 $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
   background-color: var(--overlay-bg);
   border: 1px solid var(--overlay-border);
   border-radius: $border-radius;
@@ -184,7 +313,13 @@
 }
 
 .image-counter {
-  @include typography($size: $font-size-xs, $weight: $font-weight-regular, $height: $line-height-xs, $color: $white);
+  @include typography(
+    $size: $font-size-xs, 
+    $weight: $font-weight-regular, 
+    $height: $line-height-xs, 
+    $color: $white
+  );
+
   padding: 0 $spacing-xs;
   border-radius: $border-radius-sm;
   backdrop-filter: blur(4px);
@@ -192,11 +327,78 @@
 
 .info {
   padding: $spacing-sm;
+  margin-right: $spacing-sm;
+
+  @media (min-width: $breakpoint-sm) {
+    margin-right: inherit;
+  }
+}
+
+.header {
+  @include flex-layout(
+    $justify: space-between, 
+    $align: center, 
+    $gap: $spacing-sm
+  );
+
+  @media (min-width: $breakpoint-sm) {
+    max-height: $line-height-base;
+  }
+}
+
+.header-actions {
+  @include flex-layout(
+    $align: center, 
+    $gap: $spacing-sm
+  );
+
+  flex-shrink: 0;
+}
+
+.favorite-btn {
+  @include flex-layout(
+    $justify: center, 
+    $align: center
+  );
+
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  padding: 1px $spacing-xs;
+  background: transparent;
+  border: none;
+  color: $text-color;
+  cursor: pointer;
+  transition: transform $transition-fast, color $transition-fast;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active {
+    color: $primary-color;
+  }
 }
 
 .name {
-  @include typography($size: $font-size-base, $weight: $font-weight-semibold, $height: $line-height-base);
+  @include typography(
+    $size: $font-size-sm, 
+    $weight: $font-weight-regular, 
+    $height: $line-height-sm
+  );
+
   margin-top: 0;
+
+  @media (min-width: $breakpoint-sm) {
+    @include typography(
+      $size: $font-size-base, 
+      $height: $line-height-base
+    );
+  }
 
   .stretched-link {
     color: inherit;
@@ -209,7 +411,7 @@
       right: 0;
       bottom: 0;
       left: 0;
-      z-index: 1; // Base layer for the clickable area
+      z-index: 1;
       pointer-events: auto;
     }
 
@@ -227,34 +429,127 @@
 }
 
 .derivative {
-  @include typography($size: $font-size-xs, $height: $line-height-xs, $color: $text-light);
+  @include typography(
+    $size: $font-size-xs, 
+    $height: $line-height-xs, 
+    $color: $text-light
+  );
+
   margin-bottom: $spacing-md;
 }
 
+// Mobile specs display
+.mobile-specs {
+  @include typography(
+    $size: $font-size-xs, 
+    $height: $line-height-xs, 
+    $color: $text-light
+  );
+
+  display: flex;
+  flex-direction: column;
+  padding-block: 3px;
+
+  .spec-row {
+    display: flex;
+    gap: $spacing-sm;
+
+    span:not(:last-child)::after {
+      content: '|';
+      margin-left: $spacing-sm;
+      color: $text-light;
+    }
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    display: none;
+  }
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: $spacing-xs;
+  margin-bottom: $spacing-sm;
+
+  @media (min-width: $breakpoint-sm) {
+    grid-template-columns: inherit;
+    margin-top: inherit;
+    margin-bottom: inherit;
+  }
+}
+
 .footer {
-  @include flex-layout($justify: space-between, $align: center);
-  margin-top: $spacing-md;
+  @include flex-layout($justify: flex-end);
+
+  @media (min-width: $breakpoint-sm) {
+    @include flex-layout(
+      $justify: space-between, 
+      $align: center
+    );
+    margin-top: $spacing-md;
+  }
+}
+
+.price-details {
+  text-align: right;
+
+  @media (min-width: $breakpoint-sm) {
+    text-align: left;
+  }
 }
 
 .price {
-  @include flex-layout($justify: space-between, $align: baseline, $gap: $spacing-xs);
+  @include flex-layout($justify: flex-end, $align: baseline, $gap: $spacing-xs);
 
   .price-value {
     @include typography(
-      $size: $font-size-lg,
-      $weight: $font-weight-bold,
-      $height: $line-height-base,
+      $size: $font-size-sm,
+      $weight: $font-weight-regular,
+      $height: $line-height-sm,
       $color: $text-color
     );
+
+    @media (min-width: $breakpoint-sm) {
+      @include typography(
+        $size: $font-size-lg,
+        $weight: $font-weight-bold,
+        $height: $line-height-base,
+      );
+    }
   }
 
   .price-meta {
-    @include typography($size: $font-size-xs, $height: $line-height-xs, $color: $text-color);
+    @include typography(
+      $size: $font-size-xs, 
+      $height: $line-height-xs, 
+      $color: $text-light
+    );
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @include flex-layout(
+      $justify: flex-start, 
+      $align: baseline, 
+      $gap: $spacing-xs
+    );
+  }
+}
+
+.call-to-action {
+  display: none;
+
+  @media (min-width: $breakpoint-sm) {
+    display: block;
   }
 }
 
 .view-btn {
-  @include typography($size: $font-size-base, $weight: $font-weight-semibold);
+  @include typography(
+    $size: $font-size-base, 
+    $weight: $font-weight-semibold
+  );
+
   position: relative;
   z-index: 2;
   padding: $spacing-sm $spacing-xl;
@@ -276,8 +571,16 @@
 }
 
 .price-secondary {
-  @include flex-layout($align: center, $gap: $spacing-sm);
-  @include typography($size: $font-size-xs, $height: $line-height-xs);
+  @include flex-layout(
+    $justify: flex-end, 
+    $align: center, 
+    $gap: $spacing-sm
+  );
+
+  @include typography(
+    $size: $font-size-xs, 
+    $height: $line-height-xs
+  );
 
   .strikethrough {
     color: $text-light;
@@ -285,8 +588,7 @@
   }
 
   .savings {
-    color: $text-color;
-    font-weight: $font-weight-regular;
+    color: $text-light;
   }
 
   .finance-link {
@@ -299,5 +601,13 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @include flex-layout(
+      $justify: flex-start, 
+      $align: center, 
+      $gap: $spacing-sm
+    );
   }
 }

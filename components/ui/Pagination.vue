@@ -46,24 +46,25 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
     <button
       class="btn btn--nav"
       :disabled="vehicleStore.currentPage === 1"
-      aria-label="Go to first page"
-      @click="goToFirst"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="11 17 6 12 11 7"></polyline>
-        <polyline points="18 17 13 12 18 7"></polyline>
-      </svg>
-    </button>
-
-    <button
-      class="btn btn--nav"
-      :disabled="vehicleStore.currentPage === 1"
       aria-label="Go to previous page"
       @click="vehicleStore.previousPage()"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6"></polyline>
+      <svg 
+        width="10" 
+        height="12" 
+        viewBox="0 0 10 12" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path 
+          d="M7 11L2.7071 6.70706C2.31658 6.31653 2.31659 5.68337 2.70711 5.29284L7 1" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
       </svg>
+
     </button>
 
     <div class="pages" role="group" aria-label="Page numbers">
@@ -86,8 +87,20 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
       aria-label="Go to next page"
       @click="vehicleStore.nextPage()"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="9 18 15 12 9 6"></polyline>
+      <svg 
+        width="10" 
+        height="12" 
+        viewBox="0 0 10 12" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path 
+          d="M3 1L7.2929 5.29294C7.68342 5.68347 7.68342 6.31663 7.29289 6.70716L3 11" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
       </svg>
     </button>
 
@@ -97,9 +110,27 @@ const goToLast = () => goToPage(vehicleStore.totalPages)
       aria-label="Go to last page"
       @click="goToLast"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="13 17 18 12 13 7"></polyline>
-        <polyline points="6 17 11 12 6 7"></polyline>
+      <svg 
+        width="20" 
+        height="12" 
+        viewBox="0 0 20 12" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path 
+          d="M13 1L17.2929 5.29294C17.6834 5.68347 17.6834 6.31663 17.2929 6.70716L13 11" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
+        <path 
+          d="M3 1L7.2929 5.29294C7.68342 5.68347 7.68342 6.31663 7.29289 6.70716L3 11" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
       </svg>
     </button>
   </nav>

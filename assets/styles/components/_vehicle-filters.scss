@@ -1,28 +1,82 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
+.filters {
+  @include flex-layout($wrap: nowrap);
+
+  @media (min-width: $breakpoint-sm) {
+    @include flex-layout(
+      $wrap: wrap, 
+      $gap: $spacing-md
+    );
+  }
+}
+
 .buttons {
-  @include flex-layout($wrap: wrap, $gap: $spacing-xs);
+  display: flex;
+  flex-grow: 1;
+  margin-bottom: $spacing-lg;
+
+  @media (min-width: $breakpoint-sm) {
+     @include flex-layout(
+      $wrap: wrap, 
+      $gap: $spacing-xs
+    );
+
+     margin-bottom: inherit;
+  }
 }
 
 .btn {
-  @include typography($size: $font-size-base, $weight: $font-weight-medium);
-  padding: $spacing-xs $spacing-xl;
-  background: $white;
-  border: 1px solid $border-color;
-  border-radius: 24px;
+  @include typography(
+    $size: $font-size-sm, 
+    $height: $line-height-sm, 
+    $weight: $font-weight-regular
+  );
+
+  flex: 1;
+  padding: calc($spacing-sm - 2px) $spacing-md;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
   color: $text-light;
+  text-align: center;
   cursor: pointer;
   transition: all 0.2s;
 
-  &:hover {
-    border-color: var(--filter-border-hover);
-    color: $text-color;
+  &.active {
+    background: transparent;
+    border-bottom-color: $primary-color;
+    color: $primary-color;
   }
 
-  &.active {
-    background: $primary-color;
-    border-color: $primary-color;
-    color: $white;
+  @media (min-width: $breakpoint-sm) {
+    @include typography(
+      $size: $font-size-base, 
+      $height: $line-height-base
+    );
+    
+    flex: none;
+    padding: 2px $spacing-xl;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: 24px;
+    color: $text-light;
+
+    &:hover {
+      border-color: var(--filter-border-hover);
+      color: $text-color;
+    }
+
+    &.active {
+      background: $primary-color;
+      border-color: $primary-color;
+      color: $white;
+
+      &:hover {
+        background: $primary-color;
+      }
+    }
   }
 }

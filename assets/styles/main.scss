@@ -100,10 +100,10 @@ a {
 .container {
   max-width: 1029px;
   margin: 0 auto;
-  padding: 0 $spacing-md;
+  padding-left: $spacing-sm;
 
-  @media (min-width: $breakpoint-md) {
-    padding: 0 $spacing-xl;
+  @media (min-width: $breakpoint-sm) {
+    padding-inline: calc($spacing-xl * 2);
   }
 }
 

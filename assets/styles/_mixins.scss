@@ -38,13 +38,14 @@
 
 /// Typography mixin with conditional property rendering.
 /// Only outputs CSS properties for the arguments you provide.
-///
+
 /// @param {String | Number} $size      [null] - Font size: e.g., 16px, 1rem, $font-size-lg
 /// @param {String | Number} $weight    [null] - Font weight: 400, 500, 600, 700, bold, etc.
 /// @param {String | Number} $height    [null] - Line height: e.g., 1.5, 24px, normal
 /// @param {String} $transform          [null] - Text transform: uppercase, capitalize, lowercase, none
 /// @param {String | Number} $spacing   [null] - Letter spacing: e.g., 0.5px, 0.1em
 /// @param {String} $color              [null] - Text color
+
 @mixin typography($size: null, $weight: null, $height: null, $transform: null, $spacing: null, $color: null) {
   @if $size {
     font-size: $size;
@@ -73,6 +74,7 @@
 
 /// Skeleton loading gradient animation.
 /// Creates a shimmer effect for placeholder content.
+
 @mixin skeleton-gradient {
   background: linear-gradient(
     90deg,

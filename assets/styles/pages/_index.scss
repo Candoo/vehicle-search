@@ -2,26 +2,70 @@
 @use '../mixins' as *;
 
 .page {
-  padding: $spacing-xl 0;
+  @media (min-width: $breakpoint-sm) {
+    padding-block: $spacing-xxl;
+  }
 }
 
 .header {
-  @include flex-layout($align: center, $justify: flex-start, $wrap: wrap, $gap: $spacing-lg);
-  margin-bottom: $spacing-xl;
+  @include flex-layout($direction: column-reverse);
+  margin: 0 auto $spacing-lg;
+  max-width: 1029px;
+
+  @media (min-width: $breakpoint-sm) {
+    @include flex-layout(
+      $direction: row, 
+      $align: center, 
+      $justify: flex-start, 
+      $wrap: wrap, 
+      $gap: $spacing-lg
+    );
+
+    margin-bottom: $spacing-xxl;
+    padding: 0 calc($spacing-xl * 2);
+  }
+}
+
+.heading {
+  padding-inline: $spacing-md;
+
+  @media (min-width: $breakpoint-sm) {
+    padding-inline: 0;
+  }
 }
 
 .count {
-  @include typography($size: $font-size-lg, $weight: $font-weight-bold, $height: $line-height-lg, $color: $text-color);
-  min-width: 170px;
+  @include typography(
+    $size: $font-size-sm, 
+    $weight: $font-weight-regular, 
+    $height: $line-height-sm, 
+    $color: $text-color
+  );
+
   margin: 0;
+
+  @media (min-width: $breakpoint-sm) {
+    @include typography(
+      $size: $font-size-lg, 
+      $weight: $font-weight-bold, 
+      $height: $line-height-base
+    );
+
+    min-width: 170px;
+  }
 }
 
 .count-skeleton {
   @include skeleton-gradient;
-  width: 170px;
-  height: $line-height-lg;
+  width: 130px;
+  height: $line-height-sm;
   margin: 0;
   border-radius: $border-radius-sm;
+
+  @media (min-width: $breakpoint-sm) {
+    width: 170px;
+    height: $line-height-base;
+  }
 }
 
 .error {
@@ -30,7 +74,10 @@
   text-align: center;
 
   p {
-    @include typography($size: $font-size-lg, $height: $line-height-lg);
+    @include typography(
+      $size: $font-size-lg, 
+      $height: $line-height-lg
+    );
   }
 }
 
