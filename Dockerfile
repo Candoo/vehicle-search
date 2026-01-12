@@ -4,6 +4,10 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
+# Accept build argument for API base URL (required for build-time configuration)
+ARG NUXT_PUBLIC_API_BASE
+ENV NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
+
 # Copy package files
 COPY package*.json ./
 
